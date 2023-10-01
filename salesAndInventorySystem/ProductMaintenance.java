@@ -1,0 +1,644 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package salesAndInventorySystem;
+
+import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import net.proteanit.sql.DbUtils;
+
+/**
+ *
+ * @author james
+ */
+public class ProductMaintenance extends javax.swing.JFrame {
+
+    /**
+     * Creates new form ProductMaintenance
+     */
+    public ProductMaintenance() {
+        initComponents();
+        setRecordsToTable();
+        showIcon();
+        sizeSelect();
+        flavorSelect();
+        flavorSelect_();
+        showoz();
+    }
+    
+    public void showoz(){
+        String prods = sizeSelect.getSelectedItem().toString();
+        
+        System.out.println(prods);
+        try{
+            Statement s = DBConnector.mycon().createStatement();
+            ResultSet rs = s.executeQuery("SELECT sizeinounce FROM product_size WHERE productsize='"+prods+"' ");
+
+            while(rs.next()){
+                String pros = rs.getString("sizeinounce");
+                
+                ozTf.setText(pros + " oz");
+            }
+            
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(this, e);
+        }
+    }
+    
+    public void flavorSelect_(){
+        
+        try{
+            Statement s = DBConnector.mycon().createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM product_flavor");
+            Vector v = new Vector();
+            
+            while(rs.next()){
+                v.add(rs.getString("flavor"));
+                
+                DefaultComboBoxModel com = new DefaultComboBoxModel(v);
+                searchFlavorCombobox.setModel(com);
+            }
+            
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(this, e);
+        }
+    }
+    
+    public void sizeSelect(){
+        
+        try{
+            Statement s = DBConnector.mycon().createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM product_size");
+            Vector v = new Vector();
+            
+            while(rs.next()){
+                v.add(rs.getString("productsize"));
+                
+                DefaultComboBoxModel com = new DefaultComboBoxModel(v);
+                sizeSelect.setModel(com);
+            }
+            
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(this, e);
+        }
+    }
+    
+    public void flavorSelect(){
+        
+        try{
+            Statement s = DBConnector.mycon().createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM product_flavor");
+            Vector v = new Vector();
+            
+            while(rs.next()){
+                v.add(rs.getString("flavor"));
+                
+                DefaultComboBoxModel com = new DefaultComboBoxModel(v);
+                flavorSelect.setModel(com);
+            }
+            
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(this, e);
+        }
+    }
+    
+    private void showIcon(){
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("wine__.png")));
+    }
+    
+    public void setRecordsToTable(){
+        
+        try
+        {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost/el_coco_db","root","root");
+            PreparedStatement pst = con.prepareStatement("SELECT * FROM product_maintenance");
+            ResultSet rs = pst.executeQuery();
+            
+            while(rs.next()){
+                
+                int product_id = rs.getInt("product_id");
+                String flavor = rs.getString("flavor");
+                String size = rs.getString("size");
+                double price = rs.getDouble("price");
+                int stocks = rs.getInt("stocks");
+                String status = rs.getString("Status");
+                
+                Object[] obj = {product_id, flavor, size, price, stocks, status };
+                
+                DefaultTableModel model = (DefaultTableModel)productMaintenanceTable.getModel();
+                model.addRow(obj);
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        productIdTf = new javax.swing.JTextField();
+        priceTf = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        updateBtn = new javax.swing.JButton();
+        addNewProductBtn = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        editBtn = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        productMaintenanceTable = new javax.swing.JTable();
+        sizeSelect = new javax.swing.JComboBox<>();
+        statusSelect = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
+        refreshBtn = new javax.swing.JButton();
+        addNewProductBtn1 = new javax.swing.JButton();
+        flavorSelect = new javax.swing.JComboBox<>();
+        addNewProductBtn2 = new javax.swing.JButton();
+        searchFlavorCombobox = new javax.swing.JComboBox<>();
+        statusSearch = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        ozTf = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 224, 145)));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        productIdTf.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        productIdTf.setToolTipText("");
+        productIdTf.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 224, 145)));
+        productIdTf.setEnabled(false);
+        productIdTf.setMargin(new java.awt.Insets(5, 5, 5, 5));
+        jPanel2.add(productIdTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 210, 250, 40));
+
+        priceTf.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        priceTf.setToolTipText("");
+        priceTf.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 224, 145)));
+        priceTf.setEnabled(false);
+        jPanel2.add(priceTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, 250, 40));
+
+        jLabel8.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        jLabel8.setText("Select flavor:");
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, -1, 40));
+
+        jLabel9.setFont(new java.awt.Font("Franklin Gothic Book", 1, 22)); // NOI18N
+        jLabel9.setText("Flavor");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, 40));
+
+        jLabel10.setFont(new java.awt.Font("Franklin Gothic Book", 1, 22)); // NOI18N
+        jLabel10.setText("Size");
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, -1, 40));
+
+        jLabel11.setFont(new java.awt.Font("Franklin Gothic Book", 1, 22)); // NOI18N
+        jLabel11.setText("Price");
+        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, -1, 40));
+
+        updateBtn.setBackground(new java.awt.Color(44, 119, 33));
+        updateBtn.setFont(new java.awt.Font("Franklin Gothic Demi", 0, 18)); // NOI18N
+        updateBtn.setForeground(new java.awt.Color(255, 255, 255));
+        updateBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/updated.png"))); // NOI18N
+        updateBtn.setText("UPDATE");
+        updateBtn.setEnabled(false);
+        updateBtn.setFocusable(false);
+        updateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateBtnActionPerformed(evt);
+            }
+        });
+        jPanel2.add(updateBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 470, 140, 50));
+
+        addNewProductBtn.setBackground(new java.awt.Color(44, 119, 33));
+        addNewProductBtn.setFont(new java.awt.Font("Franklin Gothic Demi", 0, 18)); // NOI18N
+        addNewProductBtn.setForeground(new java.awt.Color(255, 255, 255));
+        addNewProductBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/add.png"))); // NOI18N
+        addNewProductBtn.setText("ADD NEW PRODUCT");
+        addNewProductBtn.setFocusable(false);
+        addNewProductBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addNewProductBtnActionPerformed(evt);
+            }
+        });
+        jPanel2.add(addNewProductBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 250, 50));
+
+        jLabel13.setFont(new java.awt.Font("Franklin Gothic Book", 1, 22)); // NOI18N
+        jLabel13.setText("Product ID");
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, 40));
+
+        editBtn.setBackground(new java.awt.Color(44, 119, 33));
+        editBtn.setFont(new java.awt.Font("Franklin Gothic Demi", 0, 18)); // NOI18N
+        editBtn.setForeground(new java.awt.Color(255, 255, 255));
+        editBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/edit.png"))); // NOI18N
+        editBtn.setText("EDIT");
+        editBtn.setFocusable(false);
+        editBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editBtnActionPerformed(evt);
+            }
+        });
+        jPanel2.add(editBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 470, 110, 50));
+
+        productMaintenanceTable.setFont(new java.awt.Font("Franklin Gothic Book", 0, 14)); // NOI18N
+        productMaintenanceTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Product ID", "Flavor", "Size", "Price", "Stocks", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        productMaintenanceTable.getTableHeader().setReorderingAllowed(false);
+        productMaintenanceTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productMaintenanceTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(productMaintenanceTable);
+        if (productMaintenanceTable.getColumnModel().getColumnCount() > 0) {
+            productMaintenanceTable.getColumnModel().getColumn(0).setResizable(false);
+            productMaintenanceTable.getColumnModel().getColumn(1).setResizable(false);
+            productMaintenanceTable.getColumnModel().getColumn(2).setResizable(false);
+            productMaintenanceTable.getColumnModel().getColumn(3).setResizable(false);
+            productMaintenanceTable.getColumnModel().getColumn(4).setResizable(false);
+            productMaintenanceTable.getColumnModel().getColumn(5).setResizable(false);
+        }
+
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 80, 920, 440));
+
+        sizeSelect.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        sizeSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "500 mL", "1 Liter", "4 Liters", "6 Liters", "32 Liters", "36 Liters" }));
+        sizeSelect.setEnabled(false);
+        sizeSelect.setFocusable(false);
+        sizeSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sizeSelectActionPerformed(evt);
+            }
+        });
+        jPanel2.add(sizeSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 310, 110, 40));
+
+        statusSelect.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        statusSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Obsolete" }));
+        statusSelect.setEnabled(false);
+        statusSelect.setFocusable(false);
+        statusSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusSelectActionPerformed(evt);
+            }
+        });
+        jPanel2.add(statusSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 410, 250, 40));
+
+        jLabel12.setFont(new java.awt.Font("Franklin Gothic Book", 1, 22)); // NOI18N
+        jLabel12.setText("Status");
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, 40));
+
+        refreshBtn.setBackground(new java.awt.Color(44, 119, 33));
+        refreshBtn.setFont(new java.awt.Font("Franklin Gothic Book", 0, 14)); // NOI18N
+        refreshBtn.setForeground(new java.awt.Color(255, 255, 255));
+        refreshBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/refresh (1).png"))); // NOI18N
+        refreshBtn.setText("Refresh");
+        refreshBtn.setFocusable(false);
+        refreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshBtnActionPerformed(evt);
+            }
+        });
+        jPanel2.add(refreshBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1250, 30, 120, 40));
+
+        addNewProductBtn1.setBackground(new java.awt.Color(44, 119, 33));
+        addNewProductBtn1.setFont(new java.awt.Font("Franklin Gothic Demi", 0, 18)); // NOI18N
+        addNewProductBtn1.setForeground(new java.awt.Color(255, 255, 255));
+        addNewProductBtn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addflavor.png"))); // NOI18N
+        addNewProductBtn1.setText("ADD NEW FLAVOR");
+        addNewProductBtn1.setFocusable(false);
+        addNewProductBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addNewProductBtn1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(addNewProductBtn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, 250, 50));
+
+        flavorSelect.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        flavorSelect.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "500 mL", "1 Liter", "4 Liters", "6 Liters", "32 Liters", "36 Liters" }));
+        flavorSelect.setEnabled(false);
+        flavorSelect.setFocusable(false);
+        flavorSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                flavorSelectActionPerformed(evt);
+            }
+        });
+        jPanel2.add(flavorSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 260, 250, 40));
+
+        addNewProductBtn2.setBackground(new java.awt.Color(44, 119, 33));
+        addNewProductBtn2.setFont(new java.awt.Font("Franklin Gothic Demi", 0, 18)); // NOI18N
+        addNewProductBtn2.setForeground(new java.awt.Color(255, 255, 255));
+        addNewProductBtn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/addszie.png"))); // NOI18N
+        addNewProductBtn2.setText("ADD NEW SIZE");
+        addNewProductBtn2.setFocusable(false);
+        addNewProductBtn2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addNewProductBtn2ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(addNewProductBtn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 150, 250, 50));
+
+        searchFlavorCombobox.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        searchFlavorCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "500 mL", "1 Liter", "4 Liters", "6 Liters", "32 Liters", "36 Liters" }));
+        searchFlavorCombobox.setFocusable(false);
+        searchFlavorCombobox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFlavorComboboxActionPerformed(evt);
+            }
+        });
+        jPanel2.add(searchFlavorCombobox, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 30, 150, 40));
+
+        statusSearch.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        statusSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Obsolete" }));
+        statusSearch.setFocusable(false);
+        statusSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusSearchActionPerformed(evt);
+            }
+        });
+        jPanel2.add(statusSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 30, 150, 40));
+
+        jLabel15.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        jLabel15.setText("Select Status :");
+        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 30, 120, 40));
+
+        ozTf.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        ozTf.setToolTipText("");
+        ozTf.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 224, 145)));
+        ozTf.setEnabled(false);
+        ozTf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ozTfActionPerformed(evt);
+            }
+        });
+        jPanel2.add(ozTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 310, 130, 40));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1400, 550));
+
+        jPanel1.setBackground(new java.awt.Color(0, 224, 145));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Franklin Gothic Book", 0, 48)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel1.setText("Product Maintenance");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 0, 450, 70));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1400, 70));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
+        String flavor = flavorSelect.getSelectedItem().toString();
+        String size = sizeSelect.getSelectedItem().toString();
+        String price = priceTf.getText();
+        String status = statusSelect.getSelectedItem().toString();
+        
+        if(priceTf.getText().equals("") ){
+           JOptionPane.showMessageDialog(this, "Please enter all data needed!");
+           
+       }else{
+            if(price.matches(".*[a-zA-Z]+.*")){
+                JOptionPane.showMessageDialog(this, "Incorrect Input!", "Error", JOptionPane.ERROR_MESSAGE);
+                priceTf.setText("");
+            }else{
+                
+                try{
+                    Statement s = DBConnector.mycon().createStatement();
+                    int row = productMaintenanceTable.getSelectedRow();
+                    String id = (productMaintenanceTable.getModel().getValueAt(row, 0).toString());
+                    String query = "UPDATE product_maintenance SET flavor='"+flavor+"', size='"+size+"', price='"+price+"', status='"+status+"' where product_id=" + id;
+                    
+                    s.executeUpdate(query);
+                    
+                    JOptionPane.showMessageDialog(null, "Updated Successfully!");
+                    
+                    productMaintenanceTable.setModel(new DefaultTableModel(null, new String[]{"Product ID", "Flavor", "Size", "Price", "Stocks", "Status"}));
+                    setRecordsToTable();
+                    
+                    flavorSelect.setEnabled(false);
+                    priceTf.setEnabled(false);
+                    sizeSelect.setEnabled(false);
+                    
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
+            }
+        }
+    }//GEN-LAST:event_updateBtnActionPerformed
+
+    private void addNewProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewProductBtnActionPerformed
+        AddNewProduct a = new AddNewProduct();
+        a.setVisible(true);
+    }//GEN-LAST:event_addNewProductBtnActionPerformed
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        updateBtn.setEnabled(true);
+        statusSelect.setEnabled(true);
+        flavorSelect.setEnabled(true);
+        priceTf.setEnabled(true);
+        sizeSelect.setEnabled(true);
+    }//GEN-LAST:event_editBtnActionPerformed
+
+    private void productMaintenanceTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productMaintenanceTableMouseClicked
+        updateBtn.setEnabled(false);
+        
+        productIdTf.setEnabled(false);
+         flavorSelect.setEnabled(false);
+         sizeSelect.setEnabled(false);
+         priceTf.setEnabled(false);
+         statusSelect.setEnabled(false);
+
+
+        int i = productMaintenanceTable.getSelectedRow();
+        TableModel model = productMaintenanceTable.getModel();
+        productIdTf.setText(model.getValueAt(i, 0).toString());
+        flavorSelect.setSelectedItem(model.getValueAt(i, 1).toString());
+        sizeSelect.setSelectedItem(model.getValueAt(i, 2).toString());
+        priceTf.setText(model.getValueAt(i, 3).toString());
+        String status1 = model.getValueAt(i, 5).toString();
+        switch(status1){
+            case "Active":
+            statusSelect.setSelectedIndex(0);
+            break;
+            
+            case "Obsolete":
+            statusSelect.setSelectedIndex(1);
+            break;
+        }
+        
+        showoz();
+
+        
+    }//GEN-LAST:event_productMaintenanceTableMouseClicked
+
+    private void sizeSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sizeSelectActionPerformed
+        showoz();
+    }//GEN-LAST:event_sizeSelectActionPerformed
+
+    private void statusSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusSelectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_statusSelectActionPerformed
+
+    private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        productMaintenanceTable.setModel(new DefaultTableModel(null, new String[]{"Product ID", "Flavor", "Size", "Price", "Stocks", "Status"}));
+        setRecordsToTable();
+    }//GEN-LAST:event_refreshBtnActionPerformed
+
+    private void addNewProductBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewProductBtn1ActionPerformed
+        AddNewFlavor a = new AddNewFlavor();
+        a.setVisible(true);
+    }//GEN-LAST:event_addNewProductBtn1ActionPerformed
+
+    private void flavorSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flavorSelectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_flavorSelectActionPerformed
+
+    private void addNewProductBtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewProductBtn2ActionPerformed
+        AddNewSize a = new AddNewSize();
+        a.setVisible(true);
+    }//GEN-LAST:event_addNewProductBtn2ActionPerformed
+
+    private void searchFlavorComboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFlavorComboboxActionPerformed
+        String flavor = searchFlavorCombobox.getSelectedItem().toString();
+        String searchQuery = "SELECT * FROM product_maintenance WHERE flavor ='"+flavor+"'";
+        try {
+            PreparedStatement pst = DBConnector.mycon().prepareStatement(searchQuery);
+            ResultSet rs = pst.executeQuery();
+            productMaintenanceTable.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }//GEN-LAST:event_searchFlavorComboboxActionPerformed
+
+    private void statusSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusSearchActionPerformed
+        String status = statusSearch.getSelectedItem().toString();
+        String searchQuery = "SELECT * FROM product_maintenance WHERE status ='"+status+"'";
+        try {
+            PreparedStatement pst = DBConnector.mycon().prepareStatement(searchQuery);
+            ResultSet rs = pst.executeQuery();
+            productMaintenanceTable.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex);
+        }
+    }//GEN-LAST:event_statusSearchActionPerformed
+
+    private void ozTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ozTfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ozTfActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ProductMaintenance.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ProductMaintenance.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ProductMaintenance.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ProductMaintenance.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ProductMaintenance().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addNewProductBtn;
+    private javax.swing.JButton addNewProductBtn1;
+    private javax.swing.JButton addNewProductBtn2;
+    private javax.swing.JButton editBtn;
+    public javax.swing.JComboBox<String> flavorSelect;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField ozTf;
+    private javax.swing.JTextField priceTf;
+    private javax.swing.JTextField productIdTf;
+    public javax.swing.JTable productMaintenanceTable;
+    private javax.swing.JButton refreshBtn;
+    public javax.swing.JComboBox<String> searchFlavorCombobox;
+    public javax.swing.JComboBox<String> sizeSelect;
+    public javax.swing.JComboBox<String> statusSearch;
+    private javax.swing.JComboBox<String> statusSelect;
+    private javax.swing.JButton updateBtn;
+    // End of variables declaration//GEN-END:variables
+}
